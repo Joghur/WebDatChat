@@ -13,8 +13,14 @@ import CHATDATA from "../data/dummy-data";
 
 const ChatScreen = (props) => {
   const userId = "JacobFH";
-  const initialMessage = { senderId: "", receiverId: "", message: "" };
-  const initialPrevMessages = [{ senderId: "", receiverId: "", message: "" }];
+  const initialMessage = {
+    senderId: "JacobFH",
+    receiverId: "VincentTran",
+    message: "",
+  };
+  const initialPrevMessages = [
+    { senderId: "JacobFH", receiverId: "VincentTran", message: "" },
+  ];
   const [message, setMessage] = useState(initialMessage);
   const [prevMessages, setPrevMessages] = useState(initialPrevMessages);
 
