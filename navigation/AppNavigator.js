@@ -1,10 +1,10 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
 
-import { ChatNavigator } from "./ChatNavigator";
+import { NavigationContainer } from "@react-navigation/native";
+import { MainTabNavigator } from "./ChatNavigator";
 
 const AppNavigator = (props) => {
-  return <NavigationContainer>{<ChatNavigator />}</NavigationContainer>;
+  return <NavigationContainer>{<MainTabNavigator />}</NavigationContainer>;
 };
 
 export default AppNavigator;
