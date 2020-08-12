@@ -1,72 +1,73 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Button, ActivityIndicator, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+  ScrollView,
+  TextInput,
+} from "react-native";
 
-import { API_Key } from '../settings_mbt.json';
-
+import { API_Key } from "../settings-env.json";
 
 const StartScreen = (props) => {
-
   const [isLoading, setIsLoading] = useState(false);
-  const [token, setToken] = useState("")
-  const [userId, setUserId] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [token, setToken] = useState("");
+  const [userId, setUserId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  useEffect(() => {
-
-
-  }, [])
+  useEffect(() => {}, []);
 
   const login = async (email, password) => {
-    console.log(email, password)
+    console.log(email, password);
     const response = await fetch(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + API_Key,
+      "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
+        API_Key,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
           password: password,
-          returnSecureToken: true
-        })
+          returnSecureToken: true,
+        }),
       }
     );
 
     if (!response.ok) {
       const errorResData = await response.json();
       const errorId = errorResData.error.message;
-      let message = 'Something went wrong!';
-      if (errorId === 'EMAIL_NOT_FOUND') {
-        message = 'This email could not be found!';
-      } else if (errorId === 'INVALID_PASSWORD') {
-        message = 'This password is not valid!';
+      let message = "Something went wrong!";
+      if (errorId === "EMAIL_NOT_FOUND") {
+        message = "This email could not be found!";
+      } else if (errorId === "INVALID_PASSWORD") {
+        message = "This password is not valid!";
       }
       throw new Error(message);
     }
 
     const resData = await response.json();
     console.log(resData);
-    setUserId(resData.localId)
-    setToken(resData.idToken)
-
+    setUserId(resData.localId);
+    setToken(resData.idToken);
   };
 
-
-  const onChangeHandlerEmail = txt => {
+  const onChangeHandlerEmail = (txt) => {
     setEmail(txt);
-  }
-  const onChangeHandlerPassword = txt => {
+  };
+  const onChangeHandlerPassword = (txt) => {
     setPassword(txt);
-  }
-
+  };
 
   const authHandler = async () => {
-    console.log("authHandler")
+    console.log("authHandler");
 
     setIsLoading(true);
-    login(email, password)
+    login(email, password);
     // await dispatch(action);
     // props.navigation.navigate('Wishes');
     setIsLoading(false);
@@ -76,11 +77,7 @@ const StartScreen = (props) => {
     <View>
       <Text> Start Screen</Text>
       <Text>Email</Text>
-      <TextInput
-        id="email"
-        value={email}
-        onChangeText={onChangeHandlerEmail}
-      />
+      <TextInput id="email" value={email} onChangeText={onChangeHandlerEmail} />
 
       <Text>Password</Text>
       <TextInput
@@ -88,15 +85,12 @@ const StartScreen = (props) => {
         value={password}
         onChangeText={onChangeHandlerPassword}
       />
-      <View >
+      <View>
         {isLoading ? (
           <Text>IsLoading</Text>
         ) : (
-            <Button
-              title={'Login'}
-              onPress={authHandler}
-            />
-          )}
+          <Button title={"Login"} onPress={authHandler} />
+        )}
       </View>
       {/* <View> */}
       {/* <Text>UserId: {userId ? userId : "Intet userId"}</Text> */}
