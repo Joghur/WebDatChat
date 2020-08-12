@@ -15,3 +15,5 @@ web-build/
 env.json
 
 settings_mbt.json
+
+settings-env.json
