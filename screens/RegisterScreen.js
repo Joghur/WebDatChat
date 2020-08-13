@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TextInput } from 'react-native';
 
-import { API_Key } from '../settings_mbt.json';
+import { API_Key } from '../settings-env.json';
 
 const register = async (email, password) => {
 	console.log('register, email, password', email, password);
@@ -39,10 +39,10 @@ const register = async (email, password) => {
 };
 
 const RegisterScreen = (props) => {
-	const [ isLoading, setIsLoading ] = useState(false);
-	const [ error, setError ] = useState('');
-	const [ email, setEmail ] = useState('');
-	const [ password, setPassword ] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState('');
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 
 	const onChangeHandlerEmail = (txt) => {
 		setEmail(txt);
@@ -57,8 +57,8 @@ const RegisterScreen = (props) => {
 		setIsLoading(true);
 		try {
 			register(email, password);
-      setIsLoading(false);
-      props.navigation.navigate('Start')
+			setIsLoading(false);
+			props.navigation.navigate('Start')
 		} catch (err) {
 			setIsLoading(false);
 		}
