@@ -15,7 +15,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 
 const ChatScreen = ({ navigation, route }) => {
-   const { receiverID } = route.params
+   const { receiverId, receiverEmail, senderId, senderEmail } = route.params
   const userId = "JacobFH";
   const initialMessage = {
     senderId: "JacobFH",
@@ -94,6 +94,10 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Text>{receiverId}</Text>
+      <Text>{receiverEmail}</Text>
+      <Text>{senderId}</Text>
+      <Text>{senderEmail}</Text>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.listContainer}>
           <View style={styles.test}>
