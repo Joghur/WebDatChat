@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,9 +7,11 @@ import {
   Button,
   StyleSheet,
   SafeAreaView,
+  KeyboardAvoidingView,
 } from "react-native";
 
 import CHATDATA from "../data/dummy-data";
+import { ScrollView } from "react-native-gesture-handler";
 
 
 const ChatScreen = ({ navigation, route }) => {
@@ -25,64 +27,106 @@ const ChatScreen = ({ navigation, route }) => {
   ];
   const [message, setMessage] = useState(initialMessage);
   const [prevMessages, setPrevMessages] = useState(initialPrevMessages);
+  const [isDoneLoading, setIsDoneLoading] = useState(false);
 
   const onSend = () => {
-    setPrevMessages((prevArray) => [...prevArray, message]);
+    setPrevMessages((prevArray) => [
+      ...prevArray,
+      {
+        senderId: "JacobFH",
+        receiverId: "VincentTran",
+        message: message.message,
+      },
+    ]);
+    console.log(message);
+    addMessageFireBase("JacobFH", "VincentTran", message.message);
     setMessage(initialMessage);
   };
 
-  useEffect(() => {
-    setPrevMessages(CHATDATA);
+  const addMessageFireBase = async (senderId, receiverId, message) => {
+    const response = await fetch(
+      "https://webdevchat-9c6c2.firebaseio.com/chat.json",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          senderId,
+          receiverId,
+          message,
+        }),
+      }
+    );
+
+    const chatData = await response.json();
+
+    return chatData;
+  };
+
+  const getMessageFireBase = useCallback(async () => {
+    let response = await fetch(
+      "https://webdevchat-9c6c2.firebaseio.com/chat.json",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const resData = await response.json();
+    const loadedData = [];
+    for (const key in response) {
+      loadedData.push({
+        senderId: resData[key].senderId,
+        receiverId: resData[key].receiverId,
+        message: resData[key].message,
+      });
+    }
+    setPrevMessages(loadedData);
+    setIsDoneLoading(true);
   }, []);
 
-  return (
-    <View>
-      <SafeAreaView>
-      <Text>{receiverID}</Text>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={prevMessages}
-            keyExtractor={(item) => item.index}
-            renderItem={(item) => {
-              if (item.item.senderId === userId) {
-                return (
-                  <View
-                    key={item.item.index}
-                    style={styles.senderMessageContainer}
-                  >
-                    <Text style={styles.senderMessage}>
-                      {item.item.message}
-                    </Text>
-                  </View>
-                );
-              } else {
-                return (
-                  <View
-                    key={item.item.index}
-                    style={styles.receiverMessageContainer}
-                  >
-                    <Text style={styles.receiverMessage}>
-                      {item.item.message}
-                    </Text>
-                  </View>
-                );
-              }
-            }}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            onChangeText={(text) => {
-              setMessage({ message: text });
-            }}
-            placeholder="Type stuff"
-            value={message.message}
-          />
-          <Button title={"Send"} onPress={onSend} />
-        </View>
-      </SafeAreaView>
+  useEffect(() => {
+    getMessageFireBase();
+  }, [getMessageFireBase]);
 
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
+        <ScrollView style={styles.listContainer}>
+          <View style={styles.test}>
+            {isDoneLoading &&
+              prevMessages.map((pm, index) => {
+                if (pm.senderId !== userId) {
+                  return (
+                    <View style={styles.receiverMessageContainer} key={index}>
+                      <Text style={styles.receiverMessage}>{pm.message}</Text>
+                    </View>
+                  );
+                } else {
+                  return (
+                    <View style={styles.senderMessageContainer} key={index}>
+                      <Text style={styles.senderMessage}>{pm.message}</Text>
+                    </View>
+                  );
+                }
+              })}
+          </View>
+        </ScrollView>
+      </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => {
+            setMessage({ message: text });
+          }}
+          placeholder="Type stuff"
+          value={message.message}
+        />
+        <Button title={"Send"} onPress={onSend} />
+      </View>
     </View>
   );
 };
@@ -92,39 +136,54 @@ export const screenOptions = {
 };
 
 const styles = StyleSheet.create({
+  screen: { flex: 1 },
   inputContainer: {
+    flex: 1,
+    justifyContent: "space-around",
     flexDirection: "row",
     alignItems: "flex-end",
-    borderRadius: 10,
-    flex: 1,
     margin: 10,
+    maxHeight: "10%",
   },
-  input: { marginRight: 10, width: "80%" },
-  button: { width: "15%" },
+  input: {
+    marginRight: 10,
+    width: "70%",
+    padding: 5,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#888",
+  },
+  button: {
+    width: "30%",
+  },
   listContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
     flex: 1,
-    position: "absolute", //skal ændres men tvinger beskederne til at ligge i bunden
-    bottom: "15%",
+    width: "100%",
+    //backgroundColor: "#888", // test
+    padding: 7,
+  },
+  test: {
+    flex: 1,
+    justifyContent: "space-between",
   },
   senderMessageContainer: {
     backgroundColor: "#106cec",
     borderWidth: 1,
     borderColor: "#888",
     maxWidth: "60%",
-    padding: 5,
+    padding: 7,
     borderRadius: 10,
-    elevation: 5,
+    elevation: 10,
     marginLeft: "auto",
   },
   senderMessage: {
     padding: 5,
-    marginLeft: "auto",
+    fontSize: 18,
   },
   receiverMessageContainer: {
+    flex: 1,
     backgroundColor: "#fff",
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: "#888",
     maxWidth: "60%",
     padding: 5,
@@ -134,7 +193,7 @@ const styles = StyleSheet.create({
   },
   receiverMessage: {
     padding: 5,
-    marginRight: "auto",
+    fontSize: 18,
   },
 });
 
