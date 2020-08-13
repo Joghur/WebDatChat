@@ -15,16 +15,17 @@ const StartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("Ghjds@dh.dk");
   const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const login = async (email, password) => {
     console.log(email, password);
     const response = await fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" +
-        API_Key,
+      API_Key,
       {
         method: "POST",
         headers: {
@@ -52,8 +53,9 @@ const StartScreen = (props) => {
 
     const resData = await response.json();
     console.log(resData);
-    setUserId(resData.localId);
-    setToken(resData.idToken);
+    // setUserId(resData.localId);
+    // setToken(resData.idToken);
+    setIsLoggedIn(true)
   };
 
   const onChangeHandlerEmail = (txt) => {
@@ -86,9 +88,7 @@ const StartScreen = (props) => {
         onChangeText={onChangeHandlerPassword}
       />
       <View>
-        {isLoading ? (
-          <Text>IsLoading</Text>
-        ) : (
+        {!isLoggedIn && (
           <Button title={"Login"} onPress={authHandler} />
         )}
       </View>
@@ -96,17 +96,19 @@ const StartScreen = (props) => {
       {/* <Text>UserId: {userId ? userId : "Intet userId"}</Text> */}
       {/* <Text>Token: {token ? token : "Intet token"}</Text> */}
       {/* </View> */}
-      <Button
+      {isLoggedIn && <Button
         title="Go to Chat"
         onPress={() => props.navigation.navigate("Chat")}
-      />
+      />}
       <Button
         title="Go to Register"
         onPress={() => props.navigation.navigate("Register")}
       />
       <Button
         title="Go to Userlist"
-        onPress={() => props.navigation.navigate("UserList")}
+        onPress={() => props.navigation.navigate("UserList", {
+          email: email,
+        })}
       />
     </View>
   );
