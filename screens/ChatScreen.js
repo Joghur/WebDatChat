@@ -7,10 +7,6 @@ import Chat from "../models/chat";
 const ChatScreen = ({ navigation, route }) => {
   const { receiverId, receiverEmail, senderId, senderEmail } = route.params;
 
-  const userId = "JacobFH";
-  const sId = "JacobFH";
-  const rId = "VincentTran";
-
   const [message, setMessage] = useState("");
   const [prevMessages, setPrevMessages] = useState([]);
 
@@ -77,28 +73,29 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>{receiverId}</Text>
       <Text>{receiverEmail}</Text>
-      <Text>{senderId}</Text>
-      <Text>{senderEmail}</Text>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.listContainer}>
           <View style={styles.test}>
-            {prevMessages.map((pm, index) => {
-              if (pm.senderId !== senderId) {
-                return (
-                  <View style={styles.receiverMessageContainer} key={index}>
-                    <Text style={styles.receiverMessage}>{pm.message}</Text>
-                  </View>
-                );
-              } else {
-                return (
-                  <View style={styles.senderMessageContainer} key={index}>
-                    <Text style={styles.senderMessage}>{pm.message}</Text>
-                  </View>
-                );
-              }
-            })}
+            {prevMessages
+              .filter(
+                (pm) => pm.senderId === senderId && pm.receiverId === receiverId
+              )
+              .map((pm, index) => {
+                if (pm.senderId !== senderId) {
+                  return (
+                    <View style={styles.receiverMessageContainer} key={index}>
+                      <Text style={styles.receiverMessage}>{pm.message}</Text>
+                    </View>
+                  );
+                } else {
+                  return (
+                    <View style={styles.senderMessageContainer} key={index}>
+                      <Text style={styles.senderMessage}>{pm.message}</Text>
+                    </View>
+                  );
+                }
+              })}
           </View>
         </ScrollView>
       </View>
