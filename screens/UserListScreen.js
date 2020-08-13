@@ -10,7 +10,8 @@ const UserListScreen = ({ navigation }) => {
   const onUserClick = (item, index) => {
     //console.log(`user ${item.name} with index ${index} clicked`)
     navigation.navigate('Chat', {
-      receiverID: item.id
+      receiverID: item.id,
+      senderEmail: dummyEmail
     })
   }
 
@@ -25,6 +26,8 @@ const UserListScreen = ({ navigation }) => {
     </View>
     )
   }
+
+  const dummyEmail = 'Ghjds@dh.dk'
 
   useEffect(() => {
     try{
@@ -50,6 +53,9 @@ const UserListScreen = ({ navigation }) => {
             data[key].email
           ))
         }
+        let filteredArray = loadedProducts.filter(userMail == dummyEmail)
+        console.log(filteredArray)
+
         //console.log('loadedproducts', loadedProducts)
         //let mappedArray = data.map((item, index) => {
           //console.log(item)

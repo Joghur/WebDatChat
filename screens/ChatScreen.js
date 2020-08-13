@@ -13,7 +13,7 @@ import CHATDATA from "../data/dummy-data";
 
 
 const ChatScreen = ({ navigation, route }) => {
-   const { receiverID } = route.params
+   const { receiverID, senderEmail } = route.params
   const userId = "JacobFH";
   const initialMessage = {
     senderId: "JacobFH",
@@ -39,6 +39,7 @@ const ChatScreen = ({ navigation, route }) => {
     <View>
       <SafeAreaView>
       <Text>{receiverID}</Text>
+      <Text>{senderEmail}</Text>
         <View style={styles.listContainer}>
           <FlatList
             data={prevMessages}
