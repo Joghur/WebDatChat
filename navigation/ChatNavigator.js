@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
@@ -36,7 +36,7 @@ const defaultNavOptions = {
 
 const StartStackNavigator = createStackNavigator();
 
-const StartNavigator = (props) => {
+export const StartNavigator = (props) => {
   return (
     <StartStackNavigator.Navigator screenOptions={defaultNavOptions}>
       <StartStackNavigator.Screen
@@ -76,7 +76,12 @@ const Tab = createMaterialBottomTabNavigator();
 
 export const MainTabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      barStyle={{ backgroundColor: Colors.primary }}
+      activeColor="#f0edf6"
+      inactiveColor="#3e2465"
+      shifting={true}
+    >
       <Tab.Screen
         name="Userlist"
         component={ChatNavigator}
