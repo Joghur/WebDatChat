@@ -15,7 +15,7 @@ const StartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("Ghjds@dh.dk");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
