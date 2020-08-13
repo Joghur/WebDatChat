@@ -112,7 +112,7 @@ const UserListScreen = ({ navigation, route }) => {
       <FlatList
         data={usersArray}
         renderItem={itemContainer}
-        keyExtractor={(id, index) => index}
+        keyExtractor={(id, index) => index.toString()}
         numColumns={1}
       />
     </View>
