@@ -3,14 +3,19 @@ import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, FlatList } fr
 
 import User from '../models/user'
 
-const UserListScreen = ({ navigation }) => {
+const UserListScreen = ({ navigation, route }) => {
 
   const [usersArray, setUsersArray] = useState([])
+
+  const { email } = route.params
 
   const onUserClick = (item, index) => {
     //console.log(`user ${item.name} with index ${index} clicked`)
     navigation.navigate('Chat', {
-      receiverID: item.id
+      receiverId: item.id,
+      receiverEmail: item.email,
+      senderEmail: loggedInUser[0].email,
+      senderId: loggedInUser[0].id
     })
   }
 
@@ -50,6 +55,12 @@ const UserListScreen = ({ navigation }) => {
             data[key].email
           ))
         }
+        const loggedInUser = loadedProducts.filter((user) => {
+            return user.email === email
+        })
+
+        console.log('loggedinuser', loggedInUser[0].email, loggedInUser[0].id);
+
         //console.log('loadedproducts', loadedProducts)
         //let mappedArray = data.map((item, index) => {
           //console.log(item)
@@ -80,6 +91,7 @@ const UserListScreen = ({ navigation }) => {
 
   return (
     <View>
+      <Text>{email}</Text>
         <FlatList data={usersArray} renderItem={itemContainer} keyExtractor={(id, index) => index} numColumns={2}></FlatList>
     </View>
   );
