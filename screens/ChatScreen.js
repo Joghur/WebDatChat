@@ -1,46 +1,26 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  Button,
-  StyleSheet,
-  SafeAreaView,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 
-import CHATDATA from "../data/dummy-data";
 import { ScrollView } from "react-native-gesture-handler";
-
+import Chat from "../models/chat";
 
 const ChatScreen = ({ navigation, route }) => {
-   const { receiverID } = route.params
+  const { receiverID } = route.params;
   const userId = "JacobFH";
-  const initialMessage = {
-    senderId: "JacobFH",
-    receiverId: "VincentTran",
-    message: "",
-  };
-  const initialPrevMessages = [
-    { senderId: "JacobFH", receiverId: "VincentTran", message: "" },
-  ];
-  const [message, setMessage] = useState(initialMessage);
-  const [prevMessages, setPrevMessages] = useState(initialPrevMessages);
-  const [isDoneLoading, setIsDoneLoading] = useState(false);
+  const sId = "JacobFH";
+  const rId = "VincentTran";
+
+  const [message, setMessage] = useState("");
+  const [prevMessages, setPrevMessages] = useState([]);
 
   const onSend = () => {
+    console.log("Message: ", message.message);
     setPrevMessages((prevArray) => [
       ...prevArray,
-      {
-        senderId: "JacobFH",
-        receiverId: "VincentTran",
-        message: message.message,
-      },
+      new Chat(sId, rId, message.message),
     ]);
-    console.log(message);
-    addMessageFireBase("JacobFH", "VincentTran", message.message);
-    setMessage(initialMessage);
+    addMessageFireBase(sId, rId, message.message);
+    setMessage("");
   };
 
   const addMessageFireBase = async (senderId, receiverId, message) => {
@@ -77,15 +57,17 @@ const ChatScreen = ({ navigation, route }) => {
 
     const resData = await response.json();
     const loadedData = [];
-    for (const key in response) {
-      loadedData.push({
-        senderId: resData[key].senderId,
-        receiverId: resData[key].receiverId,
-        message: resData[key].message,
-      });
+    for (const key in resData) {
+      loadedData.push(
+        new Chat(
+          resData[key].senderId,
+          resData[key].receiverId,
+          resData[key].message
+        )
+      );
     }
+    console.log("LOADEDDATA: ", loadedData);
     setPrevMessages(loadedData);
-    setIsDoneLoading(true);
   }, []);
 
   useEffect(() => {
@@ -97,22 +79,21 @@ const ChatScreen = ({ navigation, route }) => {
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.listContainer}>
           <View style={styles.test}>
-            {isDoneLoading &&
-              prevMessages.map((pm, index) => {
-                if (pm.senderId !== userId) {
-                  return (
-                    <View style={styles.receiverMessageContainer} key={index}>
-                      <Text style={styles.receiverMessage}>{pm.message}</Text>
-                    </View>
-                  );
-                } else {
-                  return (
-                    <View style={styles.senderMessageContainer} key={index}>
-                      <Text style={styles.senderMessage}>{pm.message}</Text>
-                    </View>
-                  );
-                }
-              })}
+            {prevMessages.map((pm, index) => {
+              if (pm.senderId !== userId) {
+                return (
+                  <View style={styles.receiverMessageContainer} key={index}>
+                    <Text style={styles.receiverMessage}>{pm.message}</Text>
+                  </View>
+                );
+              } else {
+                return (
+                  <View style={styles.senderMessageContainer} key={index}>
+                    <Text style={styles.senderMessage}>{pm.message}</Text>
+                  </View>
+                );
+              }
+            })}
           </View>
         </ScrollView>
       </View>
