@@ -1,11 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
 
-const ChatScreen = (props) => {
+const ChatScreen = ({ navigation, route }) => {
+
+  const { receiverID } = route.params
   return (
     <View>
       <Text> Chat Screen</Text>
-      <Button title="Go to Home" onPress={() => props.navigation.popToTop()} />
+      <Text>{receiverID}</Text>
+      <Button title="Go to Home" onPress={() => navigation.popToTop()} />
     </View>
   );
 };

@@ -1,45 +1,73 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button, ScrollView, TouchableWithoutFeedback } from "react-native";
+import { View, Text, StyleSheet, Button, TouchableWithoutFeedback, FlatList } from "react-native";
 
-const UserListScreen = (props) => {
+import User from '../models/user'
+
+const UserListScreen = ({ navigation }) => {
 
   const [usersArray, setUsersArray] = useState([])
 
-  const onUserClick = () => {
-    console.log('user clicked')
+  const onUserClick = (item, index) => {
+    //console.log(`user ${item.name} with index ${index} clicked`)
+    navigation.navigate('Chat', {
+      receiverID: item.id
+    })
+  }
+
+  const itemContainer = ({ item, index }) => {
+    return(
+      <View key={index} style={styles.usersContainer}>
+        <TouchableWithoutFeedback onPress={onUserClick.bind(this, item, index)}>
+          <View>
+            <Text>{item.email}</Text>
+          </View>
+        </TouchableWithoutFeedback>
+    </View>
+    )
   }
 
   useEffect(() => {
     try{
         const fetchData = async () => {
-        const response = await fetch("https://firestore.googleapis.com/v1beta1/projects/webdatchat-772f0/databases/(default)/documents/users/")
+        const firebaseURL = `https://rn-pracshop.firebaseio.com/users.json`
+        const response = await fetch(firebaseURL)
         const data = await response.json()
+        //console.log(data)
 
         //we have to map through an array. data is an object while data.documents is an array
-        let dataArray = data.documents
+        //let dataArray = data.documents
 
-       let mappedArray = dataArray.map((item, index) => {
+        //array to save name and email
+        const temp = [];
 
+        const loadedProducts = [];
+        //console.log('data', data)
+        for (const key in data) {
+          //console.log('data[key]', data[key])
+          //console.log('[key]', key)
+          loadedProducts.push(new User(
+            key,
+            data[key].email
+          ))
+        }
+        //console.log('loadedproducts', loadedProducts)
+        //let mappedArray = data.map((item, index) => {
+          //console.log(item)
          //specifc name and email data
          /*
          console.log(item.fields.name.stringValue)
          console.log(item.fields.email.stringValue)
          */
+        
+         //push data to array
+        //temp.push({name: item.fields.name.stringValue, email: item.fields.email.stringValue})
+        
+       
+       //console.log(temp)
 
-         //return the content
-        return (
-          <TouchableWithoutFeedback onPress={onUserClick} key={index}>
-            <View style={styles.usersContainer}>
-              <Text>{item.fields.name.stringValue}</Text>
-              <Text>{item.fields.email.stringValue}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        )
-       })
        //set the array in the state
-       setUsersArray([mappedArray])
-
-        return data
+       setUsersArray(loadedProducts)
+       //console.log('usersarray', usersArray)
       }
 
       fetchData()
@@ -51,9 +79,9 @@ const UserListScreen = (props) => {
   
 
   return (
-    <ScrollView>
-        {usersArray}
-    </ScrollView>
+    <View>
+        <FlatList data={usersArray} renderItem={itemContainer} keyExtractor={(id, index) => index} numColumns={2}></FlatList>
+    </View>
   );
 };
 
