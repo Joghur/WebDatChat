@@ -67,7 +67,9 @@ const ChatScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    getMessageFireBase();
+    setInterval(() => {
+      getMessageFireBase();
+    }, 2000);
   }, [getMessageFireBase]);
 
   return (
@@ -126,6 +128,8 @@ const styles = StyleSheet.create({
   emailContainer: {
     flexDirection: "row",
     justifyContent: "center",
+    borderBottomColor: "#888",
+    borderBottomWidth: 1,
   },
   email: {
     fontFamily: "saw-bold",
@@ -156,7 +160,8 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     width: "100%",
-    padding: 7,
+    padding: 10,
+    margin: 5,
   },
   test: {
     flex: 1,
