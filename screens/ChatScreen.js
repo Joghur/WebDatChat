@@ -5,10 +5,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import Chat from "../models/chat";
 
 const ChatScreen = ({ navigation, route }) => {
+  const { receiverId, receiverEmail, senderId, senderEmail } = route.params;
 
-   const { receiverId, receiverEmail, senderId, senderEmail } = route.params
-
-   
   const userId = "JacobFH";
   const sId = "JacobFH";
   const rId = "VincentTran";
@@ -20,9 +18,9 @@ const ChatScreen = ({ navigation, route }) => {
     console.log("Message: ", message.message);
     setPrevMessages((prevArray) => [
       ...prevArray,
-      new Chat(sId, rId, message.message),
+      new Chat(senderId, receiverId, message.message),
     ]);
-    addMessageFireBase(sId, rId, message.message);
+    addMessageFireBase(senderId, receiverId, message.message);
     setMessage("");
   };
 
@@ -87,7 +85,7 @@ const ChatScreen = ({ navigation, route }) => {
         <ScrollView style={styles.listContainer}>
           <View style={styles.test}>
             {prevMessages.map((pm, index) => {
-              if (pm.senderId !== userId) {
+              if (pm.senderId !== senderId) {
                 return (
                   <View style={styles.receiverMessageContainer} key={index}>
                     <Text style={styles.receiverMessage}>{pm.message}</Text>
