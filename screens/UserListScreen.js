@@ -6,6 +6,7 @@ import User from '../models/user'
 const UserListScreen = ({ navigation, route }) => {
 
   const [usersArray, setUsersArray] = useState([])
+  const [sender, setSender] = useState({})
 
   const { email } = route.params
 
@@ -14,8 +15,8 @@ const UserListScreen = ({ navigation, route }) => {
     navigation.navigate('Chat', {
       receiverId: item.id,
       receiverEmail: item.email,
-      senderEmail: loggedInUser[0].email,
-      senderId: loggedInUser[0].id
+      senderEmail: sender.email,
+      senderId: sender.id
     })
   }
 
@@ -78,6 +79,7 @@ const UserListScreen = ({ navigation, route }) => {
 
        //set the array in the state
        setUsersArray(loadedProducts)
+       setSender(loggedInUser[0])
        //console.log('usersarray', usersArray)
       }
 
