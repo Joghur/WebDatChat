@@ -56,10 +56,14 @@ const UserListScreen = ({ navigation, route }) => {
             data[key].email
           ))
         }
+
         const loggedInUser = loadedProducts.filter((user) => {
             return user.email === email
         })
-
+        const otherUsers = loadedProducts.filter((user) => {
+            return user.email !== email
+        })
+        
         console.log('loggedinuser', loggedInUser[0].email, loggedInUser[0].id);
 
         //console.log('loadedproducts', loadedProducts)
@@ -78,7 +82,7 @@ const UserListScreen = ({ navigation, route }) => {
        //console.log(temp)
 
        //set the array in the state
-       setUsersArray(loadedProducts)
+       setUsersArray(otherUsers)
        setSender(loggedInUser[0])
        //console.log('usersarray', usersArray)
       }
