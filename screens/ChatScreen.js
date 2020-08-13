@@ -5,7 +5,10 @@ import { ScrollView } from "react-native-gesture-handler";
 import Chat from "../models/chat";
 
 const ChatScreen = ({ navigation, route }) => {
-  const { receiverID } = route.params;
+
+   const { receiverId, receiverEmail, senderId, senderEmail } = route.params
+
+   
   const userId = "JacobFH";
   const sId = "JacobFH";
   const rId = "VincentTran";
@@ -76,6 +79,10 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      <Text>{receiverId}</Text>
+      <Text>{receiverEmail}</Text>
+      <Text>{senderId}</Text>
+      <Text>{senderEmail}</Text>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.listContainer}>
           <View style={styles.test}>
