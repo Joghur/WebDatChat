@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 
 import { ScrollView } from "react-native-gesture-handler";
 import Chat from "../models/chat";
+import Colors from "../constants/Colors";
 
 const ChatScreen = ({ navigation, route }) => {
   const { receiverId, receiverEmail, senderId, senderEmail } = route.params;
@@ -11,7 +12,6 @@ const ChatScreen = ({ navigation, route }) => {
   const [prevMessages, setPrevMessages] = useState([]);
 
   const onSend = () => {
-    console.log("Message: ", message.message);
     setPrevMessages((prevArray) => [
       ...prevArray,
       new Chat(senderId, receiverId, message.message),
@@ -22,7 +22,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const addMessageFireBase = async (senderId, receiverId, message) => {
     const response = await fetch(
-      "https://webdevchat-9c6c2.firebaseio.com/chat.json",
+      "https://rn-pracshop.firebaseio.com/chats.json",
       {
         method: "POST",
         headers: {
@@ -43,7 +43,7 @@ const ChatScreen = ({ navigation, route }) => {
 
   const getMessageFireBase = useCallback(async () => {
     let response = await fetch(
-      "https://webdevchat-9c6c2.firebaseio.com/chat.json",
+      "https://rn-pracshop.firebaseio.com/chats.json",
       {
         method: "GET",
         headers: {
@@ -63,7 +63,6 @@ const ChatScreen = ({ navigation, route }) => {
         )
       );
     }
-    console.log("LOADEDDATA: ", loadedData);
     setPrevMessages(loadedData);
   }, []);
 
@@ -73,13 +72,17 @@ const ChatScreen = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>{receiverEmail}</Text>
+      <View style={styles.emailContainer}>
+        <Text style={styles.email}>{receiverEmail}</Text>
+      </View>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.listContainer}>
           <View style={styles.test}>
             {prevMessages
               .filter(
-                (pm) => pm.senderId === senderId && pm.receiverId === receiverId
+                (pm) =>
+                  (pm.senderId === senderId && pm.receiverId === receiverId) ||
+                  (pm.senderId === receiverId && pm.receiverId === senderId)
               )
               .map((pm, index) => {
                 if (pm.senderId !== senderId) {
@@ -108,7 +111,7 @@ const ChatScreen = ({ navigation, route }) => {
           placeholder="Type stuff"
           value={message.message}
         />
-        <Button title={"Send"} onPress={onSend} />
+        <Button style={styles.button} title={"Send"} onPress={onSend} />
       </View>
     </View>
   );
@@ -120,6 +123,15 @@ export const screenOptions = {
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
+  emailContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  email: {
+    fontFamily: "saw-bold",
+    fontSize: 18,
+    color: Colors.accent,
+  },
   inputContainer: {
     flex: 1,
     justifyContent: "space-around",
@@ -129,6 +141,8 @@ const styles = StyleSheet.create({
     maxHeight: "10%",
   },
   input: {
+    fontFamily: "saw-regular",
+    fontSize: 15,
     marginRight: 10,
     width: "70%",
     padding: 5,
@@ -142,7 +156,6 @@ const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
     width: "100%",
-    //backgroundColor: "#888", // test
     padding: 7,
   },
   test: {
@@ -160,8 +173,9 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
   },
   senderMessage: {
+    fontFamily: "saw-regular",
     padding: 5,
-    fontSize: 18,
+    fontSize: 20,
   },
   receiverMessageContainer: {
     flex: 1,
@@ -175,8 +189,9 @@ const styles = StyleSheet.create({
     marginRight: "auto",
   },
   receiverMessage: {
+    fontFamily: "saw-regular",
     padding: 5,
-    fontSize: 18,
+    fontSize: 20,
   },
 });
 
