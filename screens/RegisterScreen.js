@@ -105,7 +105,7 @@ const RegisterScreen = (props) => {
 		setIsLoading(true);
 		try {
 			await register(email, password);
-			await updateUsersList(email)
+			// await updateUsersList(email)
 
 			setIsLoading(false);
 			props.navigation.navigate('Start')
