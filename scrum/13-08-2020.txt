@@ -1,0 +1,5 @@
+svært ved at få register screen til snakke med databasen
+navigation er sat op
+måske drawer navigation til login
+scroll virker ikke på scroll længere
+vise alle users virker. dog ikke i en flatlist
