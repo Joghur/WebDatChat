@@ -15,7 +15,7 @@ const StartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
-  const [email, setEmail] = useState("Ghjds@dh.dk");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -70,46 +70,68 @@ const StartScreen = (props) => {
 
     setIsLoading(true);
     login(email, password);
-    // await dispatch(action);
-    // props.navigation.navigate('Wishes');
     setIsLoading(false);
   };
 
   return (
     <View>
-      <Text> Start Screen</Text>
-      <Text>Email</Text>
-      <TextInput id="email" value={email} onChangeText={onChangeHandlerEmail} />
+      <View style={styles.inputContainer} >
+        <View style={styles.input} >
+          <TextInput
+            id="email"
+            value={email}
+            placeholder="Email"
+            onChangeText={onChangeHandlerEmail}
+          />
+        </View>
 
-      <Text>Password</Text>
-      <TextInput
-        id="password"
-        value={password}
-        onChangeText={onChangeHandlerPassword}
-      />
-      <View>
-        {!isLoggedIn && (
-          <Button title={"Login"} onPress={authHandler} />
-        )}
+        <View style={styles.input} >
+          <TextInput
+            id="password"
+            value={password}
+            placeholder="Password"
+            onChangeText={onChangeHandlerPassword}
+            password
+          />
+        </View>
       </View>
-      {/* <View> */}
-      {/* <Text>UserId: {userId ? userId : "Intet userId"}</Text> */}
-      {/* <Text>Token: {token ? token : "Intet token"}</Text> */}
-      {/* </View> */}
-      {isLoggedIn && <Button
-        title="Go to Chat"
-        onPress={() => props.navigation.navigate("Chat")}
-      />}
-      <Button
-        title="Go to Register"
-        onPress={() => props.navigation.navigate("Register")}
-      />
-      <Button
-        title="Go to Userlist"
-        onPress={() => props.navigation.navigate("UserList", {
-          email: email,
-        })}
-      />
+      <View style={styles.buttonContainer}>
+        <View style={styles.button}>
+          {!isLoggedIn && (
+            <Button
+              title="Go to Register"
+              onPress={() => props.navigation.navigate("Register")}
+            />
+          )}
+        </View>
+        <View style={styles.button}>
+          {!isLoggedIn && (
+            <Button title={"Login"} onPress={authHandler} />
+          )}
+        </View>
+        <View>
+          {isLoggedIn && (
+            <View style={styles.button}>
+              <Button
+                title="Go to Userlist"
+                onPress={() => props.navigation.navigate("UserList", {
+                  email: email,
+                })}
+              />
+              <View style={styles.button}>
+              </View>
+              <Button
+                title="Logout"
+                onPress={() => {
+                  setIsLoggedIn(false)
+                  setEmail("")
+                  setPassword("")
+                }}
+              />
+            </View>
+          )}
+        </View>
+      </View>
     </View>
   );
 };
@@ -118,6 +140,19 @@ export const screenOptions = {
   headerTitle: "Start Screen",
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  input: {
+    marginBottom: 5
+  },
+  inputContainer: {
+    padding: 10
+  },
+  buttonContainer: {
+    padding: 10,
+  },
+  button: {
+    marginBottom: 15,
+  }
+});
 
 export default StartScreen;
