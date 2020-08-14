@@ -67,10 +67,14 @@ const ChatScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    setInterval(() => {
+    const intervalId = setInterval(() => {
       getMessageFireBase();
     }, 2000);
+    return () => {
+      clearInterval(intervalId)
+    }
   }, [getMessageFireBase]);
+
 
   return (
     <View style={{ flex: 1 }}>
