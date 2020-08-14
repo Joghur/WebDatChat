@@ -75,27 +75,28 @@ const StartScreen = (props) => {
 
   return (
     <View>
-      {/* <Text> Start Screen</Text> */}
-      {/* <Text>Email</Text> */}
-      <TextInput
-        id="email"
-        value={email}
-        placeholder="Email"
-        onChangeText={onChangeHandlerEmail}
-      />
+      <View style={styles.inputContainer} >
+        <View style={styles.input} >
+          <TextInput
+            id="email"
+            value={email}
+            placeholder="Email"
+            onChangeText={onChangeHandlerEmail}
+          />
+        </View>
 
-      {/* <Text>Password</Text> */}
-      <TextInput
-        id="password"
-        value={password}
-        placeholder="Password"
-        onChangeText={onChangeHandlerPassword}
-      />
-      <View>
-        <View>
-          {!isLoggedIn && (
-            <Button title={"Login"} onPress={authHandler} />
-          )}
+        <View style={styles.input} >
+          <TextInput
+            id="password"
+            value={password}
+            placeholder="Password"
+            onChangeText={onChangeHandlerPassword}
+            password
+          />
+        </View>
+      </View>
+      <View style={styles.buttonContainer}>
+        <View style={styles.button}>
           {!isLoggedIn && (
             <Button
               title="Go to Register"
@@ -103,20 +104,33 @@ const StartScreen = (props) => {
             />
           )}
         </View>
-        {isLoggedIn && (
-          <View>
-            <Button
-              title="Go to Userlist"
-              onPress={() => props.navigation.navigate("UserList", {
-                email: email,
-              })}
-            />
-            <Button
-              title="Logout"
-              onPress={() => setIsLoggedIn(false)}
-            />
-          </View>
-        )}
+        <View style={styles.button}>
+          {!isLoggedIn && (
+            <Button title={"Login"} onPress={authHandler} />
+          )}
+        </View>
+        <View>
+          {isLoggedIn && (
+            <View style={styles.button}>
+              <Button
+                title="Go to Userlist"
+                onPress={() => props.navigation.navigate("UserList", {
+                  email: email,
+                })}
+              />
+              <View style={styles.button}>
+              </View>
+              <Button
+                title="Logout"
+                onPress={() => {
+                  setIsLoggedIn(false)
+                  setEmail("")
+                  setPassword("")
+                }}
+              />
+            </View>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -126,6 +140,19 @@ export const screenOptions = {
   headerTitle: "Start Screen",
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  input: {
+    marginBottom: 5
+  },
+  inputContainer: {
+    padding: 10
+  },
+  buttonContainer: {
+    padding: 10,
+  },
+  button: {
+    marginBottom: 15,
+  }
+});
 
 export default StartScreen;
