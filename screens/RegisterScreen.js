@@ -116,15 +116,15 @@ const RegisterScreen = (props) => {
 
 	return (
 		<View>
-			<Text> Register Screen</Text>
-			<Text>Email</Text>
-			<TextInput id="email" value={email} onChangeText={onChangeHandlerEmail} />
-
-			<Text>Password</Text>
-			<TextInput id="password" value={password} onChangeText={onChangeHandlerPassword} />
+			{/* <Text> Register Screen</Text> */}
+			{/* <Text>Email</Text> */}
+			<TextInput id="email" placeholder="Email" value={email} onChangeText={onChangeHandlerEmail} />
+			<Text> </Text>
+			{/* <Text>Password</Text> */}
+			<TextInput id="password" placeholder="New Password" value={password} onChangeText={onChangeHandlerPassword} />
 			{/* <View>{error && <Text>error</Text>}</View> */}
 			<View>{isLoading ? <Text>IsLoading</Text> : <Button title={'Register'} onPress={registerHandler} />}</View>
-			<Button title="Go to Userlist" onPress={() => props.navigation.navigate('UserList')} />
+			{/* <Button title="Go to Userlist" onPress={() => props.navigation.navigate('UserList')} /> */}
 			<Button title="Go to Home" onPress={() => props.navigation.popToTop()} />
 		</View>
 	);

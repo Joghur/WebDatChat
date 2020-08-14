@@ -15,7 +15,7 @@ const StartScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
-  const [email, setEmail] = useState("Ghjds@dh.dk");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -70,46 +70,48 @@ const StartScreen = (props) => {
 
     setIsLoading(true);
     login(email, password);
-    // await dispatch(action);
-    // props.navigation.navigate('Wishes');
     setIsLoading(false);
   };
 
   return (
     <View>
-      <Text> Start Screen</Text>
-      <Text>Email</Text>
-      <TextInput id="email" value={email} onChangeText={onChangeHandlerEmail} />
+      {/* <Text> Start Screen</Text> */}
+      {/* <Text>Email</Text> */}
+      <TextInput
+        id="email"
+        value={email}
+        placeholder="Email"
+        onChangeText={onChangeHandlerEmail}
+      />
 
-      <Text>Password</Text>
+      {/* <Text>Password</Text> */}
       <TextInput
         id="password"
         value={password}
+        placeholder="Password"
         onChangeText={onChangeHandlerPassword}
       />
       <View>
-        {!isLoggedIn && (
-          <Button title={"Login"} onPress={authHandler} />
+        <View>
+          {!isLoggedIn && (
+            <Button title={"Login"} onPress={authHandler} />
+          )}
+          {!isLoggedIn && (
+            <Button
+              title="Go to Register"
+              onPress={() => props.navigation.navigate("Register")}
+            />
+          )}
+        </View>
+        {isLoggedIn && (<Button
+          title="Go to Userlist"
+          onPress={() => props.navigation.navigate("UserList", {
+            email: email,
+          })}
+        />
+
         )}
       </View>
-      {/* <View> */}
-      {/* <Text>UserId: {userId ? userId : "Intet userId"}</Text> */}
-      {/* <Text>Token: {token ? token : "Intet token"}</Text> */}
-      {/* </View> */}
-      {isLoggedIn && <Button
-        title="Go to Chat"
-        onPress={() => props.navigation.navigate("Chat")}
-      />}
-      <Button
-        title="Go to Register"
-        onPress={() => props.navigation.navigate("Register")}
-      />
-      <Button
-        title="Go to Userlist"
-        onPress={() => props.navigation.navigate("UserList", {
-          email: email,
-        })}
-      />
     </View>
   );
 };
