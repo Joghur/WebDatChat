@@ -103,13 +103,19 @@ const StartScreen = (props) => {
             />
           )}
         </View>
-        {isLoggedIn && (<Button
-          title="Go to Userlist"
-          onPress={() => props.navigation.navigate("UserList", {
-            email: email,
-          })}
-        />
-
+        {isLoggedIn && (
+          <View>
+            <Button
+              title="Go to Userlist"
+              onPress={() => props.navigation.navigate("UserList", {
+                email: email,
+              })}
+            />
+            <Button
+              title="Logout"
+              onPress={() => setIsLoggedIn(false)}
+            />
+          </View>
         )}
       </View>
     </View>
