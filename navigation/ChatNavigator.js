@@ -49,6 +49,16 @@ export const StartNavigator = (props) => {
         component={RegisterScreen}
         options={RegisterScreenOptions}
       />
+      <ChatStackNavigator.Screen
+        name="UserList"
+        component={UserListScreen}
+        options={UserListScreenOptions}
+      />
+      <ChatStackNavigator.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={ChatScreenOptions}
+      />
     </StartStackNavigator.Navigator>
   );
 };
@@ -67,6 +77,16 @@ const ChatNavigator = (props) => {
         name="Chat"
         component={ChatScreen}
         options={ChatScreenOptions}
+      />
+      <StartStackNavigator.Screen
+        name="Start"
+        component={StartScreen}
+        options={StartScreenOptions}
+      />
+      <StartStackNavigator.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={RegisterScreenOptions}
       />
     </ChatStackNavigator.Navigator>
   );

@@ -105,7 +105,7 @@ const RegisterScreen = (props) => {
 		setIsLoading(true);
 		try {
 			await register(email, password);
-			await updateUsersList(email)
+			// await updateUsersList(email)
 
 			setIsLoading(false);
 			props.navigation.navigate('Start')
@@ -116,16 +116,14 @@ const RegisterScreen = (props) => {
 
 	return (
 		<View>
-			<Text> Register Screen</Text>
-			<Text>Email</Text>
-			<TextInput id="email" value={email} onChangeText={onChangeHandlerEmail} />
-
-			<Text>Password</Text>
-			<TextInput id="password" value={password} onChangeText={onChangeHandlerPassword} />
-			{/* <View>{error && <Text>error</Text>}</View> */}
-			<View>{isLoading ? <Text>IsLoading</Text> : <Button title={'Register'} onPress={registerHandler} />}</View>
-			<Button title="Go to Userlist" onPress={() => props.navigation.navigate('UserList')} />
-			<Button title="Go to Home" onPress={() => props.navigation.popToTop()} />
+			<View style={styles.inputContainer} >
+				<TextInput id="email" placeholder="Email" value={email} onChangeText={onChangeHandlerEmail} />
+				<TextInput id="password" placeholder="New Password" value={password} onChangeText={onChangeHandlerPassword} />
+			</View>
+			<View style={styles.buttonContainer}>
+				<View style={styles.button}>{isLoading ? <Text>IsLoading</Text> : <Button title={'Register'} onPress={registerHandler} />}</View>
+				<Button title="Go to Home" onPress={() => props.navigation.popToTop()} />
+			</View>
 		</View>
 	);
 };
@@ -134,6 +132,19 @@ export const screenOptions = {
 	headerTitle: 'Register Screen'
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	input: {
+		marginBottom: 5
+	},
+	inputContainer: {
+		padding: 10
+	},
+	buttonContainer: {
+		padding: 10,
+	},
+	button: {
+		marginBottom: 15,
+	}
+});
 
 export default RegisterScreen;

@@ -1,0 +1,2 @@
+vi har sat projektet op så alle kan køre programmet
+vi har lavet screens vi kan arbejde i så vi ikke får problemer med at redigere i samme filer
